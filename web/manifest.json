@@ -1,0 +1,38 @@
+{
+  "name": "Smart Calculator - Professional Scientific Calculator",
+  "short_name": "Smart Calc",
+  "description": "Professional, modern scientific calculator Progressive Web App with offline support, history tracking, and dark/light modes.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "background_color": "#18181b",
+  "theme_color": "#6366f1",
+  "orientation": "any",
+  "categories": ["utilities", "productivity", "education"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

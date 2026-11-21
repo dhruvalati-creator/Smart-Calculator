@@ -1,0 +1,14 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Data files
+data/history.json
+data/test_history.json
+
+# Virtual environments and local runtime
+venv/
+env/
+.env
+python_runtime/

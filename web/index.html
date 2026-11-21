@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Smart Calculator - Professional Scientific PWA</title>
+  
+  <!-- PWA Meta Tags -->
+  <meta name="description" content="Professional, responsive, installable scientific calculator with offline support and history.">
+  <meta name="theme-color" content="#18181b">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Smart Calc">
+  <meta name="application-name" content="Smart Calculator">
+  
+  <!-- Manifest & Icons -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Loading / Splash Screen -->
+  <div id="loading-screen" aria-hidden="true">
+    <img src="icons/icon-192.png" alt="Smart Calculator" class="splash-icon">
+    <h1 class="splash-title">SMART CALCULATOR</h1>
+    <div class="splash-spinner"></div>
+  </div>
+
+  <!-- Main Calculator Container -->
+  <main class="calculator-app" id="calculator-app" role="region" aria-label="Smart Calculator Application">
+    
+    <!-- Top Header -->
+    <header class="header-bar">
+      <div class="brand-wrapper">
+        <img src="icons/icon-192.png" alt="Logo" class="app-logo">
+        <span class="app-title">SMART CALC</span>
+        <span class="mode-badge" id="mode-badge">Standard</span>
+      </div>
+
+      <div class="header-controls">
+        <button id="install-pwa-btn" class="install-btn" title="Install Calculator as App" aria-label="Install App">
+          📲 Install
+        </button>
+        <button id="mode-toggle-btn" class="icon-btn" title="Toggle Scientific Mode" aria-label="Toggle Scientific Mode">
+          Scientific
+        </button>
+        <button id="theme-toggle-btn" class="icon-btn" title="Toggle Theme" aria-label="Toggle Theme">
+          ☀️ Light
+        </button>
+        <button id="history-toggle-btn" class="icon-btn" title="View History" aria-label="View History">
+          🕒 History
+        </button>
+      </div>
+    </header>
+
+    <!-- Display Section -->
+    <section class="display-section" aria-live="polite">
+      <div class="expression-line" id="expression-display"></div>
+      <div class="result-line" id="result-display">0</div>
+    </section>
+
+    <!-- Keypad Grid -->
+    <section class="keypad-container" id="keypad">
+      <!-- Row 1: Scientific (sin, cos) + Standard (AC, DEL, %, ÷) -->
+      <button class="calc-btn btn-sci sci-only" data-action="function" data-value="sin">sin</button>
+      <button class="calc-btn btn-sci sci-only" data-action="function" data-value="cos">cos</button>
+      <button class="calc-btn btn-action" data-action="clear" aria-label="All Clear">AC</button>
+      <button class="calc-btn btn-action" data-action="delete" aria-label="Delete last character">DEL</button>
+      <button class="calc-btn btn-op" data-action="percentage">%</button>
+      <button class="calc-btn btn-op" data-action="operator" data-value="÷">÷</button>
+
+      <!-- Row 2: Scientific (tan, log) + Standard (7, 8, 9, ×) -->
+      <button class="calc-btn btn-sci sci-only" data-action="function" data-value="tan">tan</button>
+      <button class="calc-btn btn-sci sci-only" data-action="function" data-value="log">log</button>
+      <button class="calc-btn btn-num" data-action="number" data-value="7">7</button>
+      <button class="calc-btn btn-num" data-action="number" data-value="8">8</button>
+      <button class="calc-btn btn-num" data-action="number" data-value="9">9</button>
+      <button class="calc-btn btn-op" data-action="operator" data-value="×">×</button>
+
+      <!-- Row 3: Scientific (ln, n!) + Standard (4, 5, 6, −) -->
+      <button class="calc-btn btn-sci sci-only" data-action="function" data-value="ln">ln</button>
+      <button class="calc-btn btn-sci sci-only" data-action="factorial">n!</button>
+      <button class="calc-btn btn-num" data-action="number" data-value="4">4</button>
+      <button class="calc-btn btn-num" data-action="number" data-value="5">5</button>
+      <button class="calc-btn btn-num" data-action="number" data-value="6">6</button>
+      <button class="calc-btn btn-op" data-action="operator" data-value="−">−</button>
+
+      <!-- Row 4: Scientific (√, x²) + Standard (1, 2, 3, +) -->
+      <button class="calc-btn btn-sci sci-only" data-action="function" data-value="sqrt">√</button>
+      <button class="calc-btn btn-sci sci-only" data-action="square">x²</button>
+      <button class="calc-btn btn-num" data-action="number" data-value="1">1</button>
+      <button class="calc-btn btn-num" data-action="number" data-value="2">2</button>
+      <button class="calc-btn btn-num" data-action="number" data-value="3">3</button>
+      <button class="calc-btn btn-op" data-action="operator" data-value="+">+</button>
+
+      <!-- Row 5: Scientific (x^y, 1/x) + Standard (±, 0, ., =) -->
+      <button class="calc-btn btn-sci sci-only" data-action="operator" data-value="^">x^y</button>
+      <button class="calc-btn btn-sci sci-only" data-action="reciprocal">1/x</button>
+      <button class="calc-btn btn-num" data-action="toggle-sign">±</button>
+      <button class="calc-btn btn-num" data-action="number" data-value="0">0</button>
+      <button class="calc-btn btn-num" data-action="number" data-value=".">.</button>
+      <button class="calc-btn btn-equal" data-action="equal" aria-label="Calculate result">=</button>
+
+      <!-- Extra Scientific Row (π, e, brackets) -->
+      <button class="calc-btn btn-sci sci-only" data-action="constant" data-value="pi">π</button>
+      <button class="calc-btn btn-sci sci-only" data-action="constant" data-value="e">e</button>
+      <button class="calc-btn btn-op sci-only" data-action="bracket" data-value="(">(</button>
+      <button class="calc-btn btn-op sci-only" data-action="bracket" data-value=")">)</button>
+      <button class="calc-btn btn-op sci-only" data-action="operator" data-value="^">^</button>
+      <button class="calc-btn btn-equal sci-only" data-action="equal">=</button>
+    </section>
+
+    <!-- Slide-Out History Drawer -->
+    <aside class="history-drawer" id="history-drawer" aria-label="Calculation History">
+      <div class="drawer-header">
+        <h2 class="drawer-title">Calculation History</h2>
+        <button id="close-history-btn" class="close-drawer-btn" aria-label="Close history drawer">✕</button>
+      </div>
+
+      <div class="history-list" id="history-list">
+        <!-- History entries will be injected here -->
+      </div>
+
+      <div class="drawer-footer">
+        <button id="clear-history-btn" class="clear-history-btn">Clear All History</button>
+      </div>
+    </aside>
+
+  </main>
+
+  <!-- Application Scripts -->
+  <script src="js/calculator.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

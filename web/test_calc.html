@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculator JS Unit Tests</title>
+  <style>
+    body { font-family: monospace; background: #18181b; color: #f4f4f5; padding: 20px; }
+    .pass { color: #4ade80; }
+    .fail { color: #f87171; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Smart Calculator JS Engine Test Suite</h1>
+  <div id="results">Running tests...</div>
+
+  <script src="js/calculator.js"></script>
+  <script>
+    const resultsEl = document.getElementById("results");
+    const testLog = [];
+    let passed = 0;
+    let failed = 0;
+
+    function assertEqual(actual, expected, testName) {
+      const match = typeof actual === "number" && typeof expected === "number"
+        ? Math.abs(actual - expected) < 1e-6
+        : actual === expected;
+
+      if (match) {
+        passed++;
+        testLog.push(`<div class="pass">✔ PASS: ${testName} -> ${actual}</div>`);
+      } else {
+        failed++;
+        testLog.push(`<div class="fail">✖ FAIL: ${testName} (Expected: ${expected}, Got: ${actual})</div>`);
+      }
+    }
+
+    function assertThrows(fn, testName) {
+      try {
+        fn();
+        failed++;
+        testLog.push(`<div class="fail">✖ FAIL: ${testName} (Did not throw)</div>`);
+      } catch (err) {
+        passed++;
+        testLog.push(`<div class="pass">✔ PASS: ${testName} -> Threw: ${err.message}</div>`);
+      }
+    }
+
+    // 1. Basic Arithmetic
+    assertEqual(SmartCalculator.add(10, 5), 15, "Add 10 + 5");
+    assertEqual(SmartCalculator.subtract(10, 4), 6, "Subtract 10 - 4");
+    assertEqual(SmartCalculator.multiply(6, 7), 42, "Multiply 6 * 7");
+    assertEqual(SmartCalculator.divide(20, 4), 5, "Divide 20 / 4");
+    assertThrows(() => SmartCalculator.divide(10, 0), "Division by zero check");
+
+    // 2. Percentage
+    assertEqual(SmartCalculator.percentage(200, 15), 30, "Percentage: 15% of 200");
+    assertEqual(SmartCalculator.percentageOf(50, 200), 25, "PercentageOf: 50 in 200");
+
+    // 3. Power, Root, Square, Reciprocal
+    assertEqual(SmartCalculator.power(2, 3), 8, "Power 2^3");
+    assertEqual(SmartCalculator.square(5), 25, "Square 5^2");
+    assertEqual(SmartCalculator.squareRoot(16), 4, "Square root 16");
+    assertEqual(SmartCalculator.reciprocal(4), 0.25, "Reciprocal 1/4");
+    assertThrows(() => SmartCalculator.squareRoot(-9), "Square root negative check");
+    assertThrows(() => SmartCalculator.reciprocal(0), "Reciprocal zero check");
+
+    // 4. Scientific
+    assertEqual(SmartCalculator.sin(0), 0, "sin(0)");
+    assertEqual(SmartCalculator.sin(90), 1, "sin(90)");
+    assertEqual(SmartCalculator.sin(30), 0.5, "sin(30)");
+    assertEqual(SmartCalculator.cos(0), 1, "cos(0)");
+    assertEqual(SmartCalculator.cos(90), 0, "cos(90)");
+    assertEqual(SmartCalculator.tan(0), 0, "tan(0)");
+    assertEqual(SmartCalculator.tan(45), 1, "tan(45)");
+    assertThrows(() => SmartCalculator.tan(90), "tan(90) asymptote check");
+    assertEqual(SmartCalculator.log10(100), 2, "log10(100)");
+    assertEqual(SmartCalculator.ln(Math.E), 1, "ln(e)");
+    assertEqual(SmartCalculator.factorial(5), 120, "factorial(5)");
+    assertEqual(SmartCalculator.factorial(0), 1, "factorial(0)");
+
+    // 5. Expression Evaluator
+    assertEqual(SafeExpressionEvaluator.evaluate("10 + 5 * 2"), 20, "Precedence: 10 + 5 * 2");
+    assertEqual(SafeExpressionEvaluator.evaluate("(10 + 5) * 2"), 30, "Brackets: (10 + 5) * 2");
+    assertEqual(SafeExpressionEvaluator.evaluate("2(3)"), 6, "Implicit Mul: 2(3)");
+    assertEqual(SafeExpressionEvaluator.evaluate("sqrt(25) + 5"), 10, "Expr: sqrt(25) + 5");
+    assertEqual(SafeExpressionEvaluator.evaluate("sin(90) + cos(0)"), 2, "Expr: sin(90) + cos(0)");
+    assertEqual(SafeExpressionEvaluator.evaluate("200 * 15%"), 30, "Expr percentage: 200 * 15%");
+    assertThrows(() => SafeExpressionEvaluator.evaluate("15 / 0"), "Evaluator Div by Zero");
+
+    resultsEl.innerHTML = `<h3>Total: ${passed + failed} | Passed: ${passed} | Failed: ${failed}</h3>` + testLog.join("");
+  </script>
+</body>
+</html>
